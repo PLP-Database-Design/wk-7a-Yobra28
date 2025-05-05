@@ -1,46 +1,48 @@
 <--QUSTION 1 -->
--- Create Orders table with primary key
+-- Create productdetail table with primary key
+CREATE TABLE ProductDetail (
+    OrderID INT PRIMARY KEY,
+    CustomerName VARCHAR(100),
+    Products VARCHAR(100)
+);
+
+-- First insert all details into the productdetail table
+INSERT INTO ProductDetail (OrderID, CustomerName, Products)
+VALUES 
+    (101, 'John Doe', 'Laptop, Mouse'),
+    (102, 'Jane Smith', 'Tablet, Keyboard, Mouse'),
+    (103, 'Emily Clark', 'Phone');
+
+
+    
+
+
+    <--QUSTION 2 -->
+   -- Create Orders table with  primary key
 CREATE TABLE Orders (
     OrderID INT PRIMARY KEY,
-    CustomerName VARCHAR(100) NOT NULL
+    CustomerName VARCHAR(100),
 );
 
--- Create OrderProducts table with composite primary key and foreign key
-CREATE TABLE OrderProducts (
-    OrderID INT,
-    Product VARCHAR(100),
-    PRIMARY KEY (OrderID, Product),
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
-);
-
--- First insert all orders into the Orders table
 INSERT INTO Orders (OrderID, CustomerName)
 VALUES 
     (101, 'John Doe'),
     (102, 'Jane Smith'),
     (103, 'Emily Clark');
-
--- Then insert the products with proper foreign key relationships
-INSERT INTO OrderProducts (OrderID, Product)
-VALUES
-    (101, 'Laptop'),
-    (101, 'Mouse'),
-    (102, 'Tablet'),
-    (102, 'Keyboard'),
-    (102, 'Mouse'),
-    (103, 'Phone');
-
-    <--QUSTION 2 -->
-    -- Create Orders table (removes CustomerName partial dependency)
-CREATE TABLE Orders AS
-SELECT DISTINCT OrderID, CustomerName
-FROM OrderDetails;
-
--- Create OrderItems table (contains full dependency on composite key)
-CREATE TABLE OrderItems AS
-SELECT OrderID, Product, Quantity
-FROM OrderDetails;
-
--- Add primary keys
-ALTER TABLE Orders ADD PRIMARY KEY (OrderID);
-ALTER TABLE OrderItems ADD PRIMARY KEY (OrderID, Product);
+-- create product table with PK and FK
+CREATE TABLE Product (
+    OrderID INT,
+    Product VARCHAR(100),
+    Quantity INT,
+    PRIMARY KEY (OrderID, Product),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+-- Insert data into the product table
+INSERT INTO Product (OrderID, Product, Quantity)
+VALUES 
+    (101, 'Laptop', 1),
+    (101, 'Mouse', 2),
+    (102, 'Tablet', 1),
+    (102, 'Keyboard', 1),
+    (102, 'Mouse', 1),
+    (103, 'Phone', 1);
